@@ -7,6 +7,7 @@ const port = config.port || 8000;
 const main = async () => {
   try {
     await mongoose.connect(config.database_url as string);
+    console.log("database connected successfully");
     app.listen(port, () => {
       console.log("app is listening on port " + port);
     });
