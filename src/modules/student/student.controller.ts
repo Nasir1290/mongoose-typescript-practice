@@ -5,42 +5,83 @@ const createStudent = async (req: Request, res: Response) => {
   try {
     const student = req.body;
     const result = await studentServices.createStudentIntoDB(student);
-    res.status(200).json({
-      success: true,
-      message: "Student created successfully",
-      data: result,
+
+    if (result) {
+      return res.status(200).json({
+        success: true,
+        message: "Student created successfully",
+        data: result,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Failed to create student",
+      });
+    }
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while creating student",
     });
-  } catch (error) {
-    console.log(error);
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getAllStudent = async (req: Request, res: Response) => {
   try {
     const result = await studentServices.getAllStudentFromDB();
-    res.status(200).json({
-      success: true,
-      message: "Student retrieved successfully",
-      data: result,
+
+    if (result && result.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Students retrieved successfully",
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "No students found",
+      });
+    }
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "An error occurred while retrieving students",
     });
-  } catch (error) {
-    console.log(error);
   }
 };
 
 const getStudentById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await studentServices.getStudentByIdFromDB(id);
-  res.status(200).json({
-    success: true,
-    message: "Student retrieved successfully",
-    data: result,
-  });
+  try {
+    const { id } = req.params;
+    const result = await studentServices.getStudentByIdFromDB(id);
+
+    if (result) {
+      return res.status(200).json({
+        success: true,
+        message: "Student retrieved successfully",
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: `Student with ID ${id} not found`,
+      });
+    }
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        `An error occurred while retrieving student by ID ${id}`,
+    });
+  }
 };
 
 export const studentControllers = {
   createStudent,
   getAllStudent,
-  getStudentById
+  getStudentById,
 };

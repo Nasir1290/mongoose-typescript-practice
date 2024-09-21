@@ -14,19 +14,28 @@ const userNameSchema = new Schema<UserName>({
   },
 });
 
-
 const studentSchema = new Schema<Student>({
   id: {
     type: String,
   },
-  name: userNameSchema,
+  name: {
+    type: userNameSchema,
+    required: [true, "user name is required"],
+  },
   avatarUrl: {
     type: String,
   },
   profileImageUrl: {
     type: String,
   },
-  gender: ["male", "female", "others"],
+  gender: {
+    type: String,
+    enum:{
+       values:["male", "female", "others"],
+       message:`{VALUE} is a invalid value`
+      },
+      required:[true,"Gender is required"]
+  },
   email: {
     type: String,
   },
@@ -36,7 +45,13 @@ const studentSchema = new Schema<Student>({
   emergencyContactNo: {
     type: String,
   },
-  bloodGroup: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+  bloodGroup: {
+    type: String,
+    enum:{
+      values: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+      message:`{VALUE} is not a correct Blood Grout Please Enter Your Blood Group`
+      },
+  },
   presentAddress: {
     type: String,
   },
@@ -45,8 +60,6 @@ const studentSchema = new Schema<Student>({
   },
 });
 
+const StudentModel = model<Student>("Student", studentSchema);
 
-
-const StudentModel = model<Student>('Student',studentSchema)
-
-export {StudentModel}
+export { StudentModel };

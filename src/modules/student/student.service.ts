@@ -6,7 +6,9 @@ const createStudentIntoDB = async (student: Student) => {
     const response = await StudentModel.create(student);
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    // Propagate the error to be handled by the calling function
+    throw new Error(error as any);
   }
 };
 
@@ -15,17 +17,23 @@ const getAllStudentFromDB = async () => {
     const response = await StudentModel.find({});
     return response;
   } catch (error) {
-    console.log(error)
+    console.error(error);
+    throw new Error(error as any);
   }
 };
 
-const getStudentByIdFromDB = async (id:string) => {
-  const response = await StudentModel.findById({id});
-  return response;
+const getStudentByIdFromDB = async (id: string) => {
+  try {
+    const response = await StudentModel.findById(id);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error as any);
+  }
 };
 
 export const studentServices = {
   createStudentIntoDB,
   getAllStudentFromDB,
-  getStudentByIdFromDB
+  getStudentByIdFromDB,
 };
