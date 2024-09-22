@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { Student, UserName } from "./student.interface";
+import { TStudent, TUserName } from "./student.interface";
 
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
@@ -14,7 +14,7 @@ const userNameSchema = new Schema<UserName>({
   },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent>({
   id: {
     type: String,
   },
@@ -30,14 +30,16 @@ const studentSchema = new Schema<Student>({
   },
   gender: {
     type: String,
-    enum:{
-       values:["male", "female", "others"],
-       message:`{VALUE} is a invalid value`
-      },
-      required:[true,"Gender is required"]
+    enum: {
+      values: ["male", "female", "others"],
+      message: `{VALUE} is a invalid value`,
+    },
+    required: [true, "Gender is required"],
   },
   email: {
     type: String,
+    required: true,
+    unique: true,
   },
   dateOfBirth: {
     type: String,
@@ -47,10 +49,10 @@ const studentSchema = new Schema<Student>({
   },
   bloodGroup: {
     type: String,
-    enum:{
+    enum: {
       values: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
-      message:`{VALUE} is not a correct Blood Grout Please Enter Your Blood Group`
-      },
+      message: `{VALUE} is not a correct Blood Grout Please Enter Your Blood Group`,
+    },
   },
   presentAddress: {
     type: String,
@@ -60,6 +62,10 @@ const studentSchema = new Schema<Student>({
   },
 });
 
-const StudentModel = model<Student>("Student", studentSchema);
+// custom methods
 
-export { StudentModel };
+
+
+const Student = model<TStudent>("Student", studentSchema);
+
+export {Student};

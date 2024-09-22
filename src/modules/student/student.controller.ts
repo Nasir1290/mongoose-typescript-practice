@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { studentServices } from "./student.service";
+import studentSchemaValidation from "./student.validation";
 
 const createStudent = async (req: Request, res: Response) => {
   try {
     const student = req.body;
-    const result = await studentServices.createStudentIntoDB(student);
+
+    const zodeParseData = studentSchemaValidation.parse(student);
+
+    const result = await studentServices.createStudentIntoDB(zodeParseData);
 
     if (result) {
       return res.status(200).json({
@@ -19,10 +24,11 @@ const createStudent = async (req: Request, res: Response) => {
       });
     }
   } catch (error: any) {
-    console.error(error);
+    console.log("i'am from error", error);
     return res.status(500).json({
       success: false,
       message: error.message || "An error occurred while creating student",
+      error: error,
     });
   }
 };
@@ -48,6 +54,7 @@ const getAllStudent = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: error.message || "An error occurred while retrieving students",
+      error,
     });
   }
 };
@@ -74,8 +81,8 @@ const getStudentById = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message:
-        error.message ||
-        `An error occurred while retrieving student by ID ${id}`,
+        error.message || `An error occurred while retrieving student by ID`,
+      error,
     });
   }
 };

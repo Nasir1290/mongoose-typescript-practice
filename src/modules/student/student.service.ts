@@ -1,9 +1,10 @@
-import { Student } from "./student.interface";
-import { StudentModel } from "./student.model";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TStudent } from "./student.interface";
+import { Student } from "./student.model";
 
-const createStudentIntoDB = async (student: Student) => {
+const createStudentIntoDB = async (student: TStudent) => {
   try {
-    const response = await StudentModel.create(student);
+    const response = await Student.create(student);
     return response;
   } catch (error) {
     console.error(error);
@@ -14,7 +15,7 @@ const createStudentIntoDB = async (student: Student) => {
 
 const getAllStudentFromDB = async () => {
   try {
-    const response = await StudentModel.find({});
+    const response = await Student.find({});
     return response;
   } catch (error) {
     console.error(error);
@@ -24,7 +25,7 @@ const getAllStudentFromDB = async () => {
 
 const getStudentByIdFromDB = async (id: string) => {
   try {
-    const response = await StudentModel.findById(id);
+    const response = await Student.findById(id);
     return response;
   } catch (error) {
     console.error(error);

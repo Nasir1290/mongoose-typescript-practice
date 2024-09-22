@@ -1,4 +1,6 @@
-export type Guardian = {
+
+
+export type TGuardian = {
   fatherName: string;
   fatherContactNo: string;
   fatherOccupation: string;
@@ -7,28 +9,30 @@ export type Guardian = {
   motherOccupation: string;
 };
 
-export type UserName = {
+export type TUserName = {
   firstName: string;
-  middleName: string;
-  lastName: string;
+  middleName?: string;
+  lastName?: string;
 };
 
-export type LocalGuardian = {
+export type TLocalGuardian = {
   name: string;
   occupation: string;
   contactNo: string;
 };
 
-export type Student = {
-  id: string;
-  name: UserName;
-  avatarUrl: string;
-  profileImageUrl: string;
+export type TStudent = {
+  id?: string;
+  name: TUserName;
+  avatarUrl?: string;
+  profileImageUrl?: string;
   gender: "male" | "female" | "others";
   email: string;
   dateOfBirth: string;
-  emergencyContactNo: string;
-  bloodGroup: "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-";
+  emergencyContactNo?: string;
+  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-";
   presentAddress: string;
-  permanentAddress: string;
+  permanentAddress?: string;
 };
+
+
