@@ -2,9 +2,14 @@
 import { TStudent } from "./student.interface";
 import { Student } from "./student.model";
 
-const createStudentIntoDB = async (student: TStudent) => {
+const createStudentIntoDB = async (studentData: TStudent) => {
   try {
-    const response = await Student.create(student);
+    const existingStudent = await Student.isStudentExist(studentData.email);
+    if (existingStudent) {
+      throw new Error("Student already exists With this email address");
+    }
+    const createdStudent = await Student.create(studentData);
+    const response =await Student.findById({_id:createdStudent._id}).select("-password");
     return response;
   } catch (error) {
     console.error(error);

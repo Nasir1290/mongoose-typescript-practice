@@ -69,6 +69,8 @@ const studentSchemaValidation = z.object({
   name: userNameSchemaValidation.refine((data) => !!data.firstName, {
     message: "User name is required",
   }),
+  email: z.string().email("Invalid email format"),
+  password:z.string(),
   avatarUrl: z.string().url().optional(),
   profileImageUrl: z.string().url().optional(),
   gender: z.enum(["male", "female", "others"], {
@@ -76,7 +78,6 @@ const studentSchemaValidation = z.object({
       return { message: `${issue} is an invalid gender value` };
     },
   }),
-  email: z.string().email("Invalid email format"),
   dateOfBirth: z.string(),
   emergencyContactNo: z.string().optional(),
   bloodGroup: z

@@ -1,7 +1,9 @@
+import bcrypt from "bcrypt";
 import { model, Schema } from "mongoose";
-import { TStudent, TUserName } from "./student.interface";
+import { StudentModel, TStudent, TUserName } from "./student.interface";
+import config from "../../app/config";
 
-const userNameSchema = new Schema<TUserName>({
+const userNameSchema = new Schema<TUserName, StudentModel>({
   firstName: {
     type: String,
     required: true,
@@ -41,6 +43,10 @@ const studentSchema = new Schema<TStudent>({
     required: true,
     unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   dateOfBirth: {
     type: String,
   },
@@ -62,10 +68,17 @@ const studentSchema = new Schema<TStudent>({
   },
 });
 
+studentSchema.pre("save",async function (next) {
+  this.password = await bcrypt.hash(this.password,Number( config.bcrypt_salt_round));
+  next();
+});
+
 // custom methods
+studentSchema.statics.isStudentExist = async function (email: string) {
+  const student = await this.findOne({ email });
+  return !!student;
+};
 
+const Student = model<TStudent, StudentModel>("Student", studentSchema);
 
-
-const Student = model<TStudent>("Student", studentSchema);
-
-export {Student};
+export { Student };

@@ -1,4 +1,4 @@
-
+import { Model } from "mongoose";
 
 export type TGuardian = {
   fatherName: string;
@@ -24,10 +24,11 @@ export type TLocalGuardian = {
 export type TStudent = {
   id?: string;
   name: TUserName;
+  email: string;
+  password: string;
   avatarUrl?: string;
   profileImageUrl?: string;
   gender: "male" | "female" | "others";
-  email: string;
   dateOfBirth: string;
   emergencyContactNo?: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-";
@@ -35,4 +36,6 @@ export type TStudent = {
   permanentAddress?: string;
 };
 
-
+export interface StudentModel extends Model<TStudent> {
+  isStudentExist(email: string): Promise<boolean>;
+}
