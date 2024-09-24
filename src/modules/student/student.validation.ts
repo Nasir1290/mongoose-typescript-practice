@@ -51,9 +51,6 @@
 
 // export default studentSchemaValidation
 
-
-
-
 // Zod validation
 import { z } from "zod";
 
@@ -70,7 +67,7 @@ const studentSchemaValidation = z.object({
     message: "User name is required",
   }),
   email: z.string().email("Invalid email format"),
-  password:z.string(),
+  password: z.string(),
   avatarUrl: z.string().url().optional(),
   profileImageUrl: z.string().url().optional(),
   gender: z.enum(["male", "female", "others"], {
@@ -85,6 +82,7 @@ const studentSchemaValidation = z.object({
     .optional(),
   presentAddress: z.string(),
   permanentAddress: z.string().optional(),
+  isDeleted: z.boolean().optional(),
 });
 
 export default studentSchemaValidation;

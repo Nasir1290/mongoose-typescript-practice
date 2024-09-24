@@ -9,7 +9,9 @@ const createStudentIntoDB = async (studentData: TStudent) => {
       throw new Error("Student already exists With this email address");
     }
     const createdStudent = await Student.create(studentData);
-    const response =await Student.findById({_id:createdStudent._id}).select("-password");
+    const response = await Student.findById({ _id: createdStudent._id }).select(
+      "-password",
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -30,8 +32,19 @@ const getAllStudentFromDB = async () => {
 
 const getStudentByIdFromDB = async (id: string) => {
   try {
-    const response = await Student.findById(id);
+    const response = await Student.aggregate([{ $match: { _id: id } }]);
+
     return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error as any);
+  }
+};
+
+const deleteStudentFromDB = async (id: string) => {
+  try {
+    const result = await Student.updateOne({ _id: id }, { isDeleted: true });
+    return result;
   } catch (error) {
     console.error(error);
     throw new Error(error as any);
@@ -42,4 +55,5 @@ export const studentServices = {
   createStudentIntoDB,
   getAllStudentFromDB,
   getStudentByIdFromDB,
+  deleteStudentFromDB,
 };

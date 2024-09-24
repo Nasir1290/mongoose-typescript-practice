@@ -34,6 +34,7 @@ export type TStudent = {
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "O+" | "O-" | "AB+" | "AB-";
   presentAddress: string;
   permanentAddress?: string;
+  isDeleted?: boolean;
 };
 
 export interface StudentModel extends Model<TStudent> {

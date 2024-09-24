@@ -66,10 +66,17 @@ const studentSchema = new Schema<TStudent>({
   permanentAddress: {
     type: String,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-studentSchema.pre("save",async function (next) {
-  this.password = await bcrypt.hash(this.password,Number( config.bcrypt_salt_round));
+studentSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_round),
+  );
   next();
 });
 
@@ -78,6 +85,11 @@ studentSchema.statics.isStudentExist = async function (email: string) {
   const student = await this.findOne({ email });
   return !!student;
 };
+
+studentSchema.pre("find", async function (next) {
+  this.find({isDeleted:{$ne:true}})
+  next();
+});
 
 const Student = model<TStudent, StudentModel>("Student", studentSchema);
 
