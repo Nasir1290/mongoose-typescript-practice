@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 import { StudentModel, TStudent, TUserName } from "./student.interface";
 import config from "../../app/config";
 
-const userNameSchema = new Schema<TUserName, StudentModel>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
@@ -16,7 +16,8 @@ const userNameSchema = new Schema<TUserName, StudentModel>({
   },
 });
 
-const studentSchema = new Schema<TStudent>({
+
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: {
     type: String,
   },
@@ -57,7 +58,7 @@ const studentSchema = new Schema<TStudent>({
     type: String,
     enum: {
       values: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
-      message: `{VALUE} is not a correct Blood Grout Please Enter Your Blood Group`,
+      message: `{VALUE} is not a correct Blood group Please Enter a valid Blood Group`,
     },
   },
   presentAddress: {
@@ -87,7 +88,7 @@ studentSchema.statics.isStudentExist = async function (email: string) {
 };
 
 studentSchema.pre("find", async function (next) {
-  this.find({isDeleted:{$ne:true}})
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
