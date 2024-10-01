@@ -1,18 +1,20 @@
+import bcrypt from "bcrypt";
 import { model, Schema } from "mongoose";
 import { TUser } from "./user.interface";
+import config from "../../config";
 
 const userSchema = new Schema<TUser>(
   {
     id: {
-      tyle: String,
+      type: String,
       required: true,
     },
     password: {
-      tyle: String,
+      type: String,
       required: true,
     },
     role: {
-      tyle: String,
+      type: String,
       enum: {
         values: ["admin", "student", "faculty"],
         messaeg: `{VALUE} is not a valid role! Role should be admin or student or faculty`,
@@ -24,6 +26,7 @@ const userSchema = new Schema<TUser>(
         values: ["in-progress", "blocked"],
         message: `{VALUE} is not a valid status. Status should be in progress or blocked`,
       },
+      default: "in-progress",
     },
     needsPasswordChange: {
       type: Boolean,
@@ -39,6 +42,13 @@ const userSchema = new Schema<TUser>(
     timestamps: true,
   },
 );
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_round),
+  );
+  next();
+});
 
 const User = model<TUser>("User", userSchema);
 export { User };

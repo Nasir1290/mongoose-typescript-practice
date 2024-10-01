@@ -6,12 +6,31 @@ const userNameSchemaValidation = z.object({
   lastName: z.string().optional(),
 });
 
+const guardianValidation = z.object({
+  fatherName: z.string(),
+  fatherOccupation: z.string(),
+  fatherContactNo: z.string(),
+  motherName: z.string(),
+  motherOccupation: z.string(),
+  motherContactNo: z.string(),
+});
+
+const localGuardianValidation = z.object({
+  name: z.string(),
+  occupation: z.string(),
+  contactNo: z.string(),
+  address: z.string(),
+});
+
 // Define the Zod schema for the Student object
 const studentSchemaValidation = z.object({
   id: z.string().optional(),
+  // user:z.object(),
   name: userNameSchemaValidation.refine((data) => !!data.firstName, {
     message: "First name is required",
   }),
+  guardian: guardianValidation,
+  localGuardian: localGuardianValidation.optional(),
   email: z.string().email("Invalid email format"),
   password: z.string(),
   avatarUrl: z.string().url().optional(),

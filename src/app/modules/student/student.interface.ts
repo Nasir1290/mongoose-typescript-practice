@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Model } from "mongoose";
 
 export type TGuardian = {
@@ -19,10 +20,12 @@ export type TLocalGuardian = {
   name: string;
   occupation: string;
   contactNo: string;
+  address: string;
 };
 
 export type TStudent = {
   id?: string;
+  user:Types.ObjectId;
   name: TUserName;
   email: string;
   password: string;
@@ -35,6 +38,8 @@ export type TStudent = {
   presentAddress: string;
   permanentAddress?: string;
   isDeleted?: boolean;
+  guardian: TGuardian;
+  localGuardian?: TLocalGuardian;
 };
 
 export interface StudentModel extends Model<TStudent> {
