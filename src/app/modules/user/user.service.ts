@@ -13,7 +13,7 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
     userData.id = "568427";
 
     const newUser = await User.create(userData);
-
+        
     if (Object.keys(newUser).length) {
       studentData.user = newUser._id;
       studentData.id = newUser.id;
